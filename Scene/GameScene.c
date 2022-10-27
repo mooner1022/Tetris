@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <windows.h>
-#include "../Engine/Shape.h"
+#include "../Engine/Object.h"
 #include "../KeyBinding.h"
 #include "GameScene.h"
 

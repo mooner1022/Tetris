@@ -6,7 +6,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "../Console/Console.h"
-#include "Shape.h"
+#include "Object.h"
 
 // [0~3] = Absolute position of mData, [4] = isFlippable(0: false, 1: true), [5~6] = width, height of shape, [7] = Color of shape, [8] = center pos
 /*

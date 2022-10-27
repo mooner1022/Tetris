@@ -2,8 +2,8 @@
 // Created by moonm on 2022-09-29.
 //
 
-#ifndef TETRIS_SHAPE_H
-#define TETRIS_SHAPE_H
+#ifndef TETRIS_OBJECT_H
+#define TETRIS_OBJECT_H
 
 #include "GameEngine.h"
 #include "../Console/Console.h"

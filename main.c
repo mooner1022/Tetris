@@ -1,6 +1,6 @@
 #include "GlobalValues.h"
 #include "Engine/GameEngine.h"
-#include "Engine/Shape.h"
+#include "Engine/Object.h"
 #include "Console/Console.h"
 
 // Scenes

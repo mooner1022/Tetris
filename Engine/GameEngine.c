@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <conio.h>
 #include "GameEngine.h"
-#include "Shape.h"
+#include "Object.h"
 #include "../KeyBinding.h"
 
 static Game* INSTANCE = NULL;
