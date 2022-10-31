@@ -99,6 +99,7 @@ DWORD WINAPI GameUIThreadFunc(void *args) {
         if (moveState == STATE_CONFLICT) {
             assignObjToMap(&currentBlock);
             int filled = checkLineFilled();
+            updateScore(filled);
 
             if (maxShapeHeight <= 1) {
                 gameState = GAME_OVER;
