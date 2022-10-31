@@ -27,7 +27,6 @@ typedef struct object_t {
     Size size;
     Position position;
     short color;
-    short direction;
     Shape center;
     Position shape[SHAPE_SIZE];
 
