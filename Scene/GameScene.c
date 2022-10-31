@@ -17,7 +17,7 @@ Position limitEndPos   = { GAMEAREA_WIDTH, 1 };
 //static Object* currentBlock = NULL;
 
 int maxShapeHeight = GAMEAREA_HEIGHT;
-static int shapeMap[GAMEAREA_HEIGHT][GAMEAREA_WIDTH] = { 0 };
+static int stackedBlocks[GAMEAREA_HEIGHT][GAMEAREA_WIDTH / 2] = { 0 };
 
 int gameState = GAME_PLAYING;
 int totalBlockCount = 0;
@@ -38,7 +38,7 @@ void assignObjToMap(Object *object) {
         pos.x *= 2;
         pos.x += (object->position.x - 1);
         pos.y += (object->position.y - 1);
-        shapeMap[pos.y][pos.x] = object->color;
+        stackedBlocks[pos.y][pos.x / 2] = object->color;
 
         if (pos.y < maxShapeHeight)
             maxShapeHeight = pos.y;
@@ -49,8 +49,8 @@ int checkLineFilled() {
     int filled = 0;
     for (int i = maxShapeHeight; i < GAMEAREA_HEIGHT; ++i) {
         bool isLineFilled = true;
-        for (int j = 1; j < GAMEAREA_WIDTH; j += 2) {
-            if (shapeMap[i][j] == 0) {
+        for (int j = 0; j < GAMEAREA_WIDTH / 2; ++j) {
+            if (stackedBlocks[i][j] == 0) {
                 isLineFilled = false;
                 break;
             }
@@ -58,9 +58,9 @@ int checkLineFilled() {
         if (isLineFilled) {
             size_t size = sizeof(int) * GAMEAREA_WIDTH;
             for (int j = i; j > maxShapeHeight; --j) {
-                memcpy_s(shapeMap[j], size, shapeMap[j - 1], size);
+                memcpy_s(stackedBlocks[j], size, stackedBlocks[j - 1], size);
             }
-            memset(shapeMap[maxShapeHeight], 0, size);
+            memset(stackedBlocks[maxShapeHeight], 0, size);
             filled++;
         }
     }
@@ -134,8 +134,8 @@ void game_onCreate(Scene *self) {
 
     // Initialize all elements to 0
     for (int i = 0; i < GAMEAREA_HEIGHT; ++i) {
-        for (int j = 0; j < GAMEAREA_WIDTH; ++j) {
-            shapeMap[i][j] = 0;
+        for (int j = 0; j < GAMEAREA_WIDTH / 2; ++j) {
+            stackedBlocks[i][j] = 0;
         }
     }
 
@@ -238,11 +238,11 @@ void game_onKeyInput(Scene *self, int key) {
 
 void game_onDraw(Scene *self) {
     if (maxShapeHeight != GAMEAREA_HEIGHT) {
-        for (int i = max(maxShapeHeight - 1, 0); i < GAMEAREA_HEIGHT; ++i) {
-            for (int j = 0; j < GAMEAREA_WIDTH; ++j) {
-                int color = shapeMap[i][j];
+        for (int i = max(maxShapeHeight - 1, 0); i < GAMEAREA_HEIGHT - 1; ++i) {
+            for (int j = 0; j < GAMEAREA_WIDTH / 2; ++j) {
+                int color = stackedBlocks[i][j];
                 if (color != 0) {
-                    moveto(j + 1, i + 1);
+                    moveto((j + 1) * 2, i + 1);
                     setColor(color);
                     printBlock(BLOCK_FILLED);
                 }
@@ -266,8 +266,8 @@ void game_onDraw(Scene *self) {
     setColor(COLOR_BLACK);
     drawLine(&limitStartPos, &limitEndPos, SPACE);
 
-    setColor(COLOR_WHITE);
     if (gameState == GAME_OVER) {
+        setColor(COLOR_WHITE);
         int midPos = GAMEAREA_HEIGHT / 2;
         moveto(9, midPos - 1);
         printf("                ");
@@ -299,7 +299,7 @@ void game_onDestroy(Scene *self) {
 
         size_t size = sizeof(int) * GAMEAREA_WIDTH;
         for (int j = GAMEAREA_HEIGHT; j > maxShapeHeight; --j) {
-            memset(shapeMap[j], 0, size);
+            memset(stackedBlocks[j], 0, size);
         }
     }
 }
@@ -385,8 +385,8 @@ int canMove(Object *object, Direction dir, int distance) {
     Position p = {0, 0};
     for (int i = 0; i < SHAPE_SIZE; ++i) {
         copyPosition(&p, &object->shape[i]);
-        p.x += simulatedPos.x;
-        p.y += simulatedPos.y;
+        addPosition(&p, &simulatedPos);
+
         if (!checkBound(p)) {
             if (p.y >= GAMEAREA_HEIGHT)
                 return STATE_CONFLICT;
@@ -394,7 +394,7 @@ int canMove(Object *object, Direction dir, int distance) {
                 return STATE_WALL;
         }
 
-        if (checkConflict && shapeMap[p.y - 1][p.x] != 0)
+        if (checkConflict && stackedBlocks[p.y - 1][p.x / 2] != SPACE)
             return STATE_CONFLICT;
     }
 
