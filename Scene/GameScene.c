@@ -106,8 +106,8 @@ DWORD WINAPI GameUIThreadFunc(void *args) {
                 nScene->_draw(nScene);
                 return 0;
             }
-            //currentBlock = getRandomShape();
-            currentBlock = getShapeByIndex(1, false);
+            currentBlock = getRandomShape();
+            //currentBlock = getShapeByIndex(1, false);
             currentBlock.position.x = (GAMEAREA_WIDTH / 4) * 2;
             currentBlock.position.y = 0;
 
