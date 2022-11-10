@@ -4,8 +4,8 @@
 #include "Console/Console.h"
 
 // Scenes
-#include "Scene/MainScene.h"
-#include "Scene/GameScene.h"
+#include "Scenes/MainScene.h"
+#include "Scenes/GameScene.h"
 
 int main() {
     initConsole();
@@ -19,7 +19,7 @@ int main() {
 
     Scene gameScene = game_createScene();
     game.addScene(&game, SCENE_GAME, &gameScene);
-    game.showScene(&game, SCENE_GAME);
+    game.showScene(&game, SCENE_MAIN);
 
     game.start(&game);
 

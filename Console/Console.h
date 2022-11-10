@@ -5,7 +5,7 @@
 #ifndef TETRIS_CONSOLE_H
 #define TETRIS_CONSOLE_H
 
-#include "../Engine/GameEngine.h"
+#include "../Engine/Object.h"
 
 #define ORIGIN_START 0
 #define ORIGIN_END   1

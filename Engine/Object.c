@@ -23,6 +23,36 @@ Shape shapes[SHAPE_COUNT][SHAPE_SIZE + 5] = {
         {1, 4, 5, 6, 0, 3, 2, COLOR_MAGENTA, 5}  // T block
 };
 
+Size sizeOf(short width, short height) {
+    Size size = { width, height };
+    return size;
+}
+
+Position positionOf(unsigned short x, unsigned short y) {
+    Position position;
+    position.x = x;
+    position.y = y;
+    return position;
+}
+
+Position clonePosition(Position* orgPos) {
+    Position newPos;
+    newPos.x = orgPos->x;
+    newPos.y = orgPos->y;
+    return newPos;
+}
+
+void copyPosition(Position* org, Position* target) {
+    org->x = target->x;
+    org->y = target->y;
+}
+
+void addPosition(Position* left, Position* right) {
+    left->x += right->x;
+    left->y += right->y;
+}
+
+
 void movetoPos(Position *position) {
     moveto(position->x, position->y);
 }

@@ -7,7 +7,7 @@
 #include <locale.h>
 #include <conio.h>
 #include <time.h>
-#include "../Engine/GameEngine.h"
+#include "../Engine/Object.h"
 #include "Console.h"
 
 HANDLE getHandle() {

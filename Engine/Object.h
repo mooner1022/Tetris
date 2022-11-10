@@ -5,8 +5,7 @@
 #ifndef TETRIS_OBJECT_H
 #define TETRIS_OBJECT_H
 
-#include "GameEngine.h"
-#include "../Console/Console.h"
+#include <stdbool.h>
 
 #define T_SHAPE 0
 #define T_LINE  1
@@ -22,6 +21,24 @@ typedef short ObjectType;
 typedef int Shape;
 typedef int MappedData;
 
+typedef struct {
+    unsigned short width;
+    unsigned short height;
+} Size;
+
+Size sizeOf(short width, short height);
+
+typedef struct {
+    int x;
+    int y;
+} Position;
+
+Position positionOf(unsigned short x, unsigned short y);
+Position clonePosition(Position* orgPos);
+void copyPosition(Position* org, Position* target);
+void addPosition(Position* left, Position* right);
+
+typedef struct object_t object_t;
 typedef struct object_t {
     ObjectType type;
     Size size;
@@ -36,7 +53,7 @@ typedef struct object_t {
 
 Position coordOfShape(int num);
 
-void object_t_draw(object_t *self);
+void object_t_draw(Object *self);
 
 Object newObject(ObjectType type, Size size, short color, const Shape shape[SHAPE_SIZE], Shape center);
 Object newShape(Size size, short color, const Shape shape[SHAPE_SIZE], Shape center);

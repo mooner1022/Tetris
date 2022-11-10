@@ -4,7 +4,8 @@
 
 #include <stdio.h>
 #include <windows.h>
-#include "../Engine/Object.h"
+#include "../Console/Console.h"
+#include "../Engine/GameEngine.h"
 #include "../KeyBinding.h"
 #include "../GlobalValues.h"
 #include "MainScene.h"
