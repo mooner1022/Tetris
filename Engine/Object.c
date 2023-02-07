@@ -329,6 +329,7 @@ Object getShapeByIndex(int index, bool flip) {
     return newShape(size, (short)selected[7], shape, selected[8]);
 }
 
+
 Object getRandomShape() {
     srand((unsigned int)(time(NULL)));
     int randNum = rand() % SHAPE_COUNT;

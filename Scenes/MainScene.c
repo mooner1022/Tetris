@@ -19,12 +19,13 @@ HANDLE UIUpdateThread = NULL;
 
 MenuItem menuitem[MENU_ITEM_SIZE] = {
         {"START GAME", SCENE_GAME},
-        { "INFO", SCENE_GAME}
+        { "INFO", SCENE_INFO}
 };
 
 DWORD WINAPI UIThreadFunc(void *args) {
     bool flag = false;
     while (UIUpdateThread != NULL) {
+        queueRenderThread();
         moveto(14, 8);
         if (flag == true) {
             setColor(COLOR_BLACK);
@@ -33,12 +34,16 @@ DWORD WINAPI UIThreadFunc(void *args) {
             setColor(COLOR_YELLOW);
             printf("T E T R I S");
         }
+        releaseRenderThread();
+
         Sleep(500);
         flag = !flag;
     }
 }
 
-void main_onCreate(Scene *self) {
+void main_onCreate(Scene *self, int prevId) {
+    setConsoleSize((Size){20, 20});
+
     titleBlock = getShapeByIndex(3, true);
     titleBlock.position.x = 26;
     titleBlock.position.y = 8;
@@ -64,6 +69,8 @@ void main_onCreate(Scene *self) {
             NULL
             );
     //WaitForSingleObject(UIUpdateThread, 30000);
+    if (prevId != -1)
+        clear();
 }
 
 void main_onKeyInput(Scene *self, int key) {
@@ -117,8 +124,9 @@ void main_onDestroy(Scene *self) {
     }
 }
 
-Scene main_createScene() {
+Scene main_createScene(int id) {
     Scene nScene = createScene(
+            id,
             main_onCreate,
             main_onKeyInput,
             main_onDraw,

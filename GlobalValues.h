@@ -7,5 +7,6 @@
 
 #define SCENE_MAIN 0
 #define SCENE_GAME 1
+#define SCENE_INFO 2
 
 #endif

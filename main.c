@@ -6,6 +6,7 @@
 // Scenes
 #include "Scenes/MainScene.h"
 #include "Scenes/GameScene.h"
+#include "Scenes/InfoScene.h"
 
 int main() {
     initConsole();
@@ -13,12 +14,16 @@ int main() {
     Size windowSize = getConsoleSize();
     Game game = createGameWindow(windowSize);
 
-    Scene mainScene = main_createScene();
+    Scene mainScene = main_createScene(SCENE_MAIN);
     game.addScene(&game, SCENE_MAIN, &mainScene);
     //game.showScene(&game, 0);
 
-    Scene gameScene = game_createScene();
+    Scene gameScene = game_createScene(SCENE_GAME);
     game.addScene(&game, SCENE_GAME, &gameScene);
+
+    Scene infoScene = info_createScene(SCENE_INFO);
+    game.addScene(&game, SCENE_INFO, &infoScene);
+
     game.showScene(&game, SCENE_MAIN);
 
     game.start(&game);

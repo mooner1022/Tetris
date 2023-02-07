@@ -7,11 +7,13 @@
 
 #include "../Engine/GameEngine.h"
 
-#define GAMEAREA_WIDTH  30
-#define GAMEAREA_HEIGHT 24
+#define GAMEAREA_WIDTH  20
+#define GAMEAREA_HEIGHT 20
 
 #define ID_CURRENT_BLOCK 0
 #define ID_GAMEAREA_BOX  1
+#define ID_NEXTBLOCK_BOX 2
+#define ID_NEXT_BLOCK    3
 
 #define DIR_UP    0
 #define DIR_RIGHT 1
@@ -20,6 +22,7 @@
 
 #define GAME_PLAYING 0
 #define GAME_OVER    1
+#define GAME_PAUSED  2
 
 #define STATE_DEFAULT  0
 #define STATE_WALL     1
@@ -27,11 +30,11 @@
 
 typedef int Direction;
 
-void game_onCreate(Scene *self);
+void game_onCreate(Scene *self, int prevId);
 void game_onKeyInput(Scene *self, int key);
 void game_onDraw(Scene *self);
 void game_onDestroy(Scene *self);
 
-Scene game_createScene();
+Scene game_createScene(int id);
 
 #endif

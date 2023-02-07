@@ -2,12 +2,12 @@
 // Created by moonm on 2022-10-02.
 //
 
-#include <stdlib.h>
 #include <windows.h>
 #include <conio.h>
 #include "GameEngine.h"
 #include "Object.h"
-#include "../KeyBinding.h"
+#include "Random.h"
+#include "../Console/Console.h"
 
 static Game* INSTANCE = NULL;
 
@@ -26,18 +26,19 @@ DWORD WINAPI GameKeyInputThread(void *args) {
 
     while ((ch = _getch()) != 27 && keyInputThread != NULL)
     {
-        if (!(ch == KEY_SPACE || ch == 0 || ch == 224))
-            continue;
-        if (ch != KEY_SPACE)
+        // Skip first value on arrow key event
+        if (ch == 0 || ch == 224)
             ch = _getch();
         if (INSTANCE != NULL && INSTANCE->currentScene != NULL) {
             Scene *scene = INSTANCE->currentScene;
             scene->onKeyInput(scene, ch);
         }
     }
+    return 0;
 }
 
 void game_t_start(game_t *self) {
+    rand_init();
     INSTANCE = self;
     keyInputThread = CreateThread(
             NULL,
@@ -56,14 +57,22 @@ void game_t_addScene(game_t *self, short id, Scene* scene) {
 
 void game_t_showScene(game_t *self, short id) {
     Scene* scene = self->scenes[id];
+    int oldId = -1;
 
     if (self->currentScene != NULL) {
         Scene* currentScene = self->currentScene;
         currentScene->onDestroy(currentScene);
-        system("cls");
+        //purgeRenderThread();
+        for (int i = 0; i < currentScene->obj_count; ++i) {
+            Object* obj = currentScene->objects[i];
+            obj->erase(obj);
+            currentScene->obj_updated[i] = false;
+        }
+        oldId = currentScene->id;
+        clear();
     }
     self->currentScene = scene;
-    scene->onCreate(scene);
+    scene->onCreate(scene, oldId);
     scene->_draw(scene);
 }
 

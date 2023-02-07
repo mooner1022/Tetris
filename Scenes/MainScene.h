@@ -14,11 +14,11 @@ typedef struct menuitem_t {
     int sceneId;
 } MenuItem;
 
-void main_onCreate(Scene *self);
+void main_onCreate(Scene *self, int prevId);
 void main_onKeyInput(Scene *self, int key);
 void main_onDraw(Scene *self);
 void main_onDestroy(Scene *self);
 
-Scene main_createScene();
+Scene main_createScene(int id);
 
 #endif

@@ -8,12 +8,14 @@
 HANDLE renderThreadMutex = NULL;
 
 Scene createScene(
-        void (* onCreate)(scene_t *self),
+        int id,
+        void (* onCreate)(scene_t *self, int prevId),
         void (* onKeyInput)(scene_t *self, int key),
         void (* onDraw)(scene_t *self),
         void (* onDestroy)(scene_t *self)
 ) {
     Scene nScene;
+    nScene.id         = id;
     nScene.onCreate   = onCreate;
     nScene.onKeyInput = onKeyInput;
     nScene.onDraw     = onDraw;
@@ -32,6 +34,21 @@ Scene createScene(
     return nScene;
 }
 
+void queueRenderThread() {
+    if (renderThreadMutex != NULL)
+        WaitForSingleObject(renderThreadMutex, INFINITE);
+}
+
+void releaseRenderThread() {
+    if (renderThreadMutex != NULL)
+        ReleaseMutex(renderThreadMutex);
+}
+
+void purgeRenderThread() {
+    if (renderThreadMutex != NULL)
+        CloseHandle(renderThreadMutex);
+}
+
 void scene_t_draw(scene_t *self) {
     /*
     system("cls");
@@ -45,7 +62,7 @@ void scene_t_draw(scene_t *self) {
     if (renderThreadMutex == NULL)
         renderThreadMutex = CreateMutex(NULL, FALSE, NULL);
 
-    WaitForSingleObject(renderThreadMutex, INFINITE);
+    queueRenderThread();
 
     for (int i = 0; i < OBJ_MAX_SIZE; ++i) {
         if (self->obj_updated[i]) {
@@ -67,7 +84,7 @@ void scene_t_draw(scene_t *self) {
         }
     }
     self->onDraw(self);
-    ReleaseMutex(renderThreadMutex);
+    releaseRenderThread();
 }
 
 void scene_t_notifyUpdated(scene_t *self, int key) {

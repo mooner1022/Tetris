@@ -9,7 +9,7 @@
 #include "Object.h"
 #include "Scene/Scene.h"
 
-#define DEBUG true
+#define DEBUG false
 
 #define SCENE_COUNT  3
 

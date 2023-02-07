@@ -7,8 +7,20 @@
 #include <locale.h>
 #include <conio.h>
 #include <time.h>
+#include <math.h>
+#include <string.h>
+#include <stdarg.h>
 #include "../Engine/Object.h"
 #include "Console.h"
+
+// private
+int getDigit(int n) {
+    int digit = 0;
+    do {
+        digit++;
+    } while (n / pow(10, digit) < 10);
+    return digit;
+}
 
 HANDLE getHandle() {
     return GetStdHandle(STD_OUTPUT_HANDLE);
@@ -17,6 +29,13 @@ HANDLE getHandle() {
 void initConsole() {
     setlocale(LC_CTYPE, "");
     hideCursor();
+    system("title Tetris by T.OverFlow");
+}
+
+void setConsoleSize(Size size) {
+    char formatted[28];
+    snprintf(formatted, sizeof(formatted), "mode con: cols=%d lines=%d", size.width * 2, size.height);
+    system(formatted);
 }
 
 void clear() {
@@ -62,6 +81,16 @@ Size getConsoleSize() {
     return size;
 }
 
+void printCenter(int width, const char* string, ...) {
+    size_t len = strlen(string);
+    int space = (width - (int)len) / 2;
+    for (int i = 0; i < space; ++i) {
+        printf(" ");
+    }
+
+    printf("%s", string);
+}
+
 void printBlock(short type) {
     unsigned short *ch;
 
@@ -83,8 +112,9 @@ void printBlock(short type) {
             ch = L"  ";
             break;
         case LINE:
-            wprintf(L"─");
-            return;
+            ch = L"─";
+            break;
+        default: return;
     }
 
     wprintf(L"%ls", ch);

@@ -30,6 +30,7 @@ typedef unsigned short Color;
 typedef short Origin;
 
 void initConsole();
+void setConsoleSize(Size size);
 void clear();
 void setColor(Color color);
 void moveto(int x, int y);
@@ -37,6 +38,7 @@ void moveto_origin(int x, int y, Origin origin);
 void hideCursor();
 Size getConsoleSize();
 
+void printCenter(int width, const char* string, ...);
 void printBlock(short type);
 void drawLine(Position* start, Position* end, short blockType);
 Color getRandomColor();
