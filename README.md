@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-A simple Tetris game made out of C.<br>
+A simple Tetris game developed in C, but with a spoon of OOP.<br>
 This project is built along the AIW (Anyway, It Works!) structure.
 </p>
 
